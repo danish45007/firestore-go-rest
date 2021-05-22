@@ -1,25 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"github.com/danish45007/go-rest/controller"
+	router "github.com/danish45007/go-rest/http"
+)
 
-	"github.com/gorilla/mux"
+var (
+	route   router.Router             = router.NewMuxRouter()
+	control controller.PostController = controller.NewPostController()
 )
 
 func main() {
-	router := mux.NewRouter()
-	port := ":8080"
-
-	// root handler
-	router.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
-		fmt.Fprintln(res, "Hello-World")
-	})
-	// get post handler
-	router.HandleFunc("/get-post", getPosts).Methods("GET")
-	// create post habndler
-	router.HandleFunc("/create-post", createPost).Methods("POST")
-	log.Println("Server listening on port", port)
-	log.Fatalln(http.ListenAndServe("127.0.0.1:8080", router))
+	route.GET("/get-post", control.GetPosts)
+	route.POST("/create-post", control.CreatePost)
+	route.SERVE("127.0.0.1:8080")
 }
