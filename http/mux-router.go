@@ -29,3 +29,7 @@ func (*muxRouter) SERVE(port string) {
 	fmt.Printf("Mux HTTP server running on port %v", port)
 	http.ListenAndServe(port, muxDispatcher)
 }
+
+func (*muxRouter) MIDDLEWARE() {
+
+}

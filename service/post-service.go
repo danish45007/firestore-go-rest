@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	repo repository.PostRespositoy = repository.NewFireStoreRepo()
+	repo repository.PostRespositoy
 )
 
 type PostService interface {
@@ -20,7 +20,8 @@ type PostService interface {
 
 type service struct{}
 
-func NewPostService() PostService {
+func NewPostService(repos repository.PostRespositoy) PostService {
+	repo = repos
 	return &service{}
 }
 
