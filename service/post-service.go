@@ -27,12 +27,12 @@ func NewPostService(repos repository.PostRespositoy) PostService {
 
 func (*service) ValidatePost(post *entity.Post) error {
 	if post == nil {
-		err := errors.New("The post is empty")
+		err := errors.New("the post is empty")
 		return err
 	}
 
 	if post.Title == "" {
-		err := errors.New("The post title is empty")
+		err := errors.New("the post title is empty")
 		return err
 	}
 	return nil
