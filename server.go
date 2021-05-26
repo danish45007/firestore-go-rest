@@ -30,5 +30,7 @@ func main() {
 	chiRouter.GET("/get-post", control.GetPosts)
 	//create post to firestore
 	chiRouter.POST("/create-post", control.CreatePost)
+	//api-mashup route
+	chiRouter.GET("/car-details", control.)
 	chiRouter.SERVE("127.0.0.1:8080")
 }
