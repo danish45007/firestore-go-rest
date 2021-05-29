@@ -19,7 +19,7 @@ type PostController interface {
 	CreatePost(res http.ResponseWriter, req *http.Request)
 }
 
-type controller struct{}
+// type controller struct{}
 
 func NewPostController(service service.PostService) PostController {
 	services = service

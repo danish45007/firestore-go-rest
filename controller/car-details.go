@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"../service"
+	"github.com/danish45007/go-rest/service"
 )
 
 type controller struct{}
@@ -24,7 +24,7 @@ func NewCarDetailsController(service service.CarDetailsService) CarDetailsContro
 
 func (*controller) GetCarDetails(response http.ResponseWriter, request *http.Request) {
 	response.Header().Set("Content-Type", "application/json")
-	result := carDetailsService.GetDetails()
+	result := carDetailsService.GetCarDetails()
 	response.WriteHeader(http.StatusOK)
 	json.NewEncoder(response).Encode(result)
 }
