@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/danish45007/go-rest/controller"
 	router "github.com/danish45007/go-rest/http"
 	"github.com/danish45007/go-rest/repository"
 	"github.com/danish45007/go-rest/service"
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -17,6 +20,18 @@ var (
 	control   controller.PostController = controller.NewPostController(services) //using DI to inject servies dependency into controller method
 	chiRouter router.Router             = router.NewChiRouter()
 )
+
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
 
 func main() {
 	//init middleware
@@ -30,5 +45,6 @@ func main() {
 	chiRouter.GET("/get-post", control.GetPosts)
 	//create post to firestore
 	chiRouter.POST("/create-post", control.CreatePost)
-	chiRouter.SERVE("127.0.0.1:8080")
+	URL := goDotEnvVariable("URL")
+	chiRouter.SERVE(URL)
 }
