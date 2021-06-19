@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"math/rand"
+	"strconv"
 
 	"github.com/danish45007/go-rest/entity"
 	"github.com/danish45007/go-rest/repository"
@@ -16,6 +17,7 @@ type PostService interface {
 	ValidatePost(post *entity.Post) error
 	Create(post *entity.Post) (*entity.Post, error)
 	FindAll() ([]entity.Post, error)
+	FindById(id string) ([]entity.Post, error)
 }
 
 type service struct{}
@@ -45,4 +47,13 @@ func (*service) Create(post *entity.Post) (*entity.Post, error) {
 
 func (*service) FindAll() ([]entity.Post, error) {
 	return repo.FindALL()
+}
+
+func (*service) FindById(id string) ([]entity.Post, error) {
+	number, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		return nil, err
+	}
+	Id := int(number)
+	return repo.FindByID(Id)
 }

@@ -1,3 +1,5 @@
+
+/*
 package service
 
 import (
@@ -71,3 +73,4 @@ func TestSavePost(t *testing.T) {
 	assert.Nil(t, err)
 
 }
+*/
