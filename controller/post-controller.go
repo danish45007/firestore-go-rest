@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -25,8 +26,9 @@ type PostController interface {
 
 type controller struct{}
 
-func NewPostController(service service.PostService) PostController {
+func NewPostController(service service.PostService, cache cache.PostCache) PostController {
 	services = service
+	postCache = cache
 	return &controller{}
 }
 
@@ -74,6 +76,7 @@ func (*controller) GetPostByID(response http.ResponseWriter, request *http.Reque
 	response.Header().Set("Content-Type", "application/json")
 	postID := strings.Split(request.URL.Path, "/")[2]
 	var post *entity.Post = postCache.Get(postID)
+	// when not stored cache or expired
 	if post == nil {
 		post, err := services.FindById(postID)
 		if err != nil {
@@ -81,10 +84,14 @@ func (*controller) GetPostByID(response http.ResponseWriter, request *http.Reque
 			json.NewEncoder(response).Encode(error.ServiceError{Message: "No posts found!"})
 			return
 		}
-		postCache.Set(postID, &post[0])
+		//store post into cache
+		p := post[0]
+		postCache.Set(postID, &p)
+		fmt.Printf("Post %v set into redis", p)
 		response.WriteHeader(http.StatusOK)
-		json.NewEncoder(response).Encode(post)
+		json.NewEncoder(response).Encode(p)
 	} else {
+		fmt.Println("Getting from redis")
 		response.WriteHeader(http.StatusOK)
 		json.NewEncoder(response).Encode(post)
 	}

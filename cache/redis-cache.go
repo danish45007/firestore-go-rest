@@ -48,16 +48,16 @@ func (cache *redisCache) Set(key string, value *entity.Post) {
 func (cache *redisCache) Get(key string) *entity.Post {
 	client := cache.CreateRedisClient()
 	var ctx = context.Background()
-
 	val, err := client.Get(ctx, key).Result()
 	if err != nil {
-		panic(err)
+		return nil
 	}
+
 	post := entity.Post{}
-	//unmarshall the post value and store into post entity
-	err = json.Unmarshal([]byte(val), post)
+	err = json.Unmarshal([]byte(val), &post)
 	if err != nil {
 		panic(err)
 	}
+
 	return &post
 }

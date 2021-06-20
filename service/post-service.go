@@ -50,7 +50,7 @@ func (*service) FindAll() ([]entity.Post, error) {
 }
 
 func (*service) FindById(id string) ([]entity.Post, error) {
-	number, err := strconv.ParseUint(id, 10, 32)
+	number, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
 		return nil, err
 	}

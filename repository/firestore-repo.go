@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -88,6 +89,7 @@ func (*repo) FindByID(id int) ([]entity.Post, error) {
 	defer client.Close()
 	var posts []entity.Post
 	data := client.Collection(collectionName).Where("ID", "==", id).Documents(ctx)
+	fmt.Println("-------------------------------->", data)
 	for {
 		doc, err := data.Next()
 		if err == iterator.Done {

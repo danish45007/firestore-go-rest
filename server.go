@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/danish45007/go-rest/cache"
 	"github.com/danish45007/go-rest/controller"
 	router "github.com/danish45007/go-rest/http"
 	"github.com/danish45007/go-rest/repository"
@@ -17,7 +18,8 @@ var (
 	postRepo repository.PostRespositoy = repository.NewFireStoreRepo()
 	services service.PostService       = service.NewPostService(postRepo)
 	//muxRouter router.Router             = router.NewMuxRouter()
-	control   controller.PostController = controller.NewPostController(services) //using DI to inject servies dependency into controller method
+	postCache cache.PostCache           = cache.NewRedisCache("localhost:6379", 0, 10)      //init redis
+	control   controller.PostController = controller.NewPostController(services, postCache) //using DI to inject servies dependency into controller method
 	chiRouter router.Router             = router.NewChiRouter()
 )
 
@@ -45,6 +47,7 @@ func main() {
 	chiRouter.GET("/get-post", control.GetPosts)
 	//create post to firestore
 	chiRouter.POST("/create-post", control.CreatePost)
+	chiRouter.GET("/posts/{id}", control.GetPostByID)
 	URL := goDotEnvVariable("URL")
 	chiRouter.SERVE(URL)
 }
