@@ -1,12 +1,30 @@
 package repository
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/danish45007/go-rest/entity"
+	"github.com/joho/godotenv"
 )
+
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
 
 type dynamoDBRepo struct {
 	tableName string
@@ -20,9 +38,15 @@ func NewDynamoDBRepository() PostRespositoy {
 
 func createDynamoDBClient() *dynamodb.DynamoDB {
 	// Create AWS Session
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	ACCESS_KEY := goDotEnvVariable("access_key_ID")
+	SECRET_KEY := goDotEnvVariable("secret_access_key")
+	sess, err := session.NewSession(&aws.Config{
+		Region:      aws.String("ap-south-1"),
+		Credentials: credentials.NewStaticCredentials(ACCESS_KEY, SECRET_KEY, ""),
+	})
+	if err != nil {
+		panic("unable to create aws session")
+	}
 
 	// Return DynamoDB client
 	return dynamodb.New(sess)
@@ -47,6 +71,7 @@ func (repo *dynamoDBRepo) Save(post *entity.Post) (*entity.Post, error) {
 	// Save the Item into DynamoDB
 	_, err = dynamoDBClient.PutItem(item)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 

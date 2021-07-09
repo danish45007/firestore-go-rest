@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	postRepo repository.PostRespositoy = repository.NewFireStoreRepo()
+	postRepo repository.PostRespositoy = repository.NewDynamoDBRepository()
 	services service.PostService       = service.NewPostService(postRepo)
 	//muxRouter router.Router             = router.NewMuxRouter()
 	postCache cache.PostCache           = cache.NewRedisCache("localhost:6379", 0, 10)      //init redis

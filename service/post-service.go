@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"math/rand"
-	"strconv"
 
 	"github.com/danish45007/go-rest/entity"
 	"github.com/danish45007/go-rest/repository"
@@ -50,10 +49,10 @@ func (*service) FindAll() ([]entity.Post, error) {
 }
 
 func (*service) FindById(id string) ([]entity.Post, error) {
-	number, err := strconv.ParseUint(id, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	Id := int(number)
-	return repo.FindByID(Id)
+	// number, err := strconv.ParseUint(id, 10, 64)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// Id := int(number)
+	return repo.FindByID(id)
 }

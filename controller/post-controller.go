@@ -77,6 +77,7 @@ func (*controller) GetPostByID(response http.ResponseWriter, request *http.Reque
 	postID := strings.Split(request.URL.Path, "/")[2]
 	var post *entity.Post = postCache.Get(postID)
 	// when not stored cache or expired
+
 	if post == nil {
 		post, err := services.FindById(postID)
 		if err != nil {
