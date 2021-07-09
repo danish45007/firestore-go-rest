@@ -78,7 +78,7 @@ func (*repo) FindALL() ([]entity.Post, error) {
 
 }
 
-func (*repo) FindByID(id int) ([]entity.Post, error) {
+func (*repo) FindByID(id string) ([]entity.Post, error) {
 	ctx := context.Background()
 	opt := option.WithCredentialsFile("C:\\Users\\DANISH\\go\\src\\go-rest\\repository\\fire.json")
 	client, err := firestore.NewClient(ctx, projectId, opt)
